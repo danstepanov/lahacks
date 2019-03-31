@@ -18,7 +18,7 @@ class App extends Component {
     const agent = new https.Agent({
       rejectUnauthorized: false
     });
-    axios({method: 'post', url: "https://localhost:5000/upload", httpsAgent: agent, data: formData })
+    axios({method: 'post', url: "http://localhost:5000/upload", httpsAgent: agent, data: formData } )
       .then(res => console.log(res))
       .catch(err => console.warn(err));
   }
