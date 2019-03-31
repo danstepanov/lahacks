@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import './App.css'
 import axios from 'axios'
+import https from 'https'
 
 class App extends Component {
   constructor(props) {
@@ -10,10 +11,30 @@ class App extends Component {
 
   _handleSubmit(e) {
     e.preventDefault();
-    let file = this.state.imagePreviewUrl
-    console.log('handle submit-', file);
-    axios.post('https://localhost:5000/upload', file).then((response) => { console.log('sent image to backend: ', response)})
+    let file = this.state.imagePreviewUrl;
+    const formData = new FormData();
+
+    formData.append("file", file);
+    const agent = new https.Agent({
+      rejectUnauthorized: false
+    });
+    axios({method: 'post', url: "https://localhost:5000/upload", httpsAgent: agent, data: formData })
+      .then(res => console.log(res))
+      .catch(err => console.warn(err));
   }
+
+  uploadFile(e) {
+  e.preventDefault();
+  let file = this.state.fileToBeSent;
+  const formData = new FormData();
+
+  formData.append("file", file);
+
+  axios
+    .post("/api/upload", formData)
+    .then(res => console.log(res))
+    .catch(err => console.warn(err));
+}
 
   _handleImageChange(e) {
     e.preventDefault();
