@@ -1,41 +1,42 @@
-import React, { Component } from 'react';
-import './App.css';
+import React, { Component } from 'react'
+import './App.css'
+import axios from 'axios'
 
 class App extends Component {
   constructor(props) {
-    super(props);
-    this.state = {file: '',imagePreviewUrl: ''};
+    super(props)
+    this.state = {file: '',imagePreviewUrl: ''}
   }
 
   _handleSubmit(e) {
     e.preventDefault();
-    // TODO: do something with -> this.state.file
-    console.log('handle uploading-', this.state.file);
+    let file = this.state.imagePreviewUrl
+    console.log('handle submit-', file);
+    axios.post('https://localhost:5000/upload', file).then((response) => { console.log('sent image to backend: ', response)})
   }
 
   _handleImageChange(e) {
     e.preventDefault();
-
-    let reader = new FileReader();
-    let file = e.target.files[0];
+    console.log('handle imageChange-', e.target.files[0]);
+    let reader = new FileReader()
+    let file = e.target.files[0]
 
     reader.onloadend = () => {
       this.setState({
         file: file,
         imagePreviewUrl: reader.result
-      });
+      })
     }
-
     reader.readAsDataURL(file)
-  }
+    }
 
   render() {
     let {imagePreviewUrl} = this.state;
-    let $imagePreview = null;
+    let $imagePreview = null
     if (imagePreviewUrl) {
-      $imagePreview = (<img src={imagePreviewUrl} alt="" />);
+      $imagePreview = (<img src={imagePreviewUrl} alt="" />)
     } else {
-      $imagePreview = (<div className="previewText">Please select an Image for Preview</div>);
+      $imagePreview = (<div className="previewText">Please select an Image for Preview</div>)
     }
 
     return (
@@ -54,8 +55,8 @@ class App extends Component {
           </div>
         </div>
       </div>
-    );
+    )
   }
 }
 
-export default App;
+export default App
